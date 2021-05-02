@@ -1,0 +1,64 @@
+*{
+
+    margin:0;
+    
+    padding:0;
+    
+    }
+    
+    html {
+      height: 100%;
+    }
+    body {
+      min-height: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align:center;
+      background: rgb(130, 136, 129);
+    }
+    
+     
+    
+    #main{
+    
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    max-width:1980px;
+    
+    min-height:100%;
+    
+    margin: auto;
+    position:relative;
+    
+    }
+    
+     
+    
+    footer{
+    
+    background:rgb(160, 165, 114);
+    clear :both;    
+    width:100%;
+    padding-top:25px;
+
+
+    height:auto;
+    overflow:hidden;
+    position: relative;
+    bottom: 0px;
+    
+    }
+    
+    .hyperlink_disable {
+        color: currentColor;
+        opacity: 1;
+        text-decoration: none;
+      }
+     
+
+    .center_app {
+
+      background-color: aqua;
+
+    }
