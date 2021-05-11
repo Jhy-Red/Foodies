@@ -1,64 +1,79 @@
-*{
 
-    margin:0;
-    
-    padding:0;
-    
-    }
-    
-    html {
-      height: 100%;
-    }
-    body {
-      min-height: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      text-align:center;
-      background: rgb(130, 136, 129);
-    }
-    
-     
-    
-    #main{
-    
-    width: 50%;
-    border: 3px solid green;
-    padding: 10px;
-    max-width:1980px;
-    
-    min-height:100%;
-    
-    margin: auto;
-    position:relative;
-    
-    }
-    
-     
-    
-    footer{
-    
-    background:rgb(160, 165, 114);
-    clear :both;    
-    width:100%;
-    padding-top:25px;
+@font-face {
+  font-family: garamond;
+  src: url('garamond.ttf');
+}
+
+html {
+background: lightgrey;
+}
+
+header{
+  background:rgb(16, 36, 92);
+  margin-left: 10em;
+  margin-right: 10em;
+  font-size: 16px;
+  min-height: 25px;
+}
+body {
+  min-height: 80%;
+  margin-left: 10em;
+  margin-right: 10em;
+  text-align:center;
+}
 
 
-    height:auto;
-    overflow:hidden;
-    position: relative;
-    bottom: 0px;
-    
-    }
-    
-    .hyperlink_disable {
-        color: currentColor;
-        opacity: 1;
-        text-decoration: none;
-      }
-     
+footer{
+  background:rgb(16, 36, 92);
+  margin-left: 10em;
+  margin-right: 10em;
+  font-size: 16px;
+  min-height: 25px;
+}
 
-    .center_app {
+.border_app{
+  border: 1px solid #fff;
+  border-radius: 1px;
+}
+.hyperlink_disable {
+    color: currentColor;
+    opacity: 1;
+    text-decoration: none;
+  }
 
-      background-color: aqua;
+.button {
+  background-color:rgb(16, 36, 92);
+  border: none;
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  list-style-type: none ;
+  border: 1px solid #fff;
+  border-radius: 1px;
+}
 
-    }
+.menu {
+    display: flex;                
+    padding:0;                           
+    justify-content: space-around;
+}
+.menu li {
+    list-style-type: none ;   
+    border:none    
+  
+}
+.menu a {
+    background-color:rgb(16, 36, 92);
+    color: white;
+    padding: 20px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    list-style-type: none ;
+    border: 2px solid #fff;
+    border-radius: 0.5px;    
+}
