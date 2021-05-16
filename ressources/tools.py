@@ -23,7 +23,7 @@ def saves_pictures(UPLOAD_FOLDER,image,app,users = False):
         return filename
         
 def translate_encode(txt):
-    import re
+    import re 
     txt = re.sub("\d"," ",txt)
 
     return txt
@@ -60,7 +60,7 @@ def request_food_local(recherche = False, flask = False, type_pred = "fruits"):
 
     cols_id = ["alim_grp_code","alim_ssgrp_code","alim_ssssgrp_code"]
     to_drop = cols_id
-    clean_df = df.drop(columns = to_drop)
+    df = df.drop(columns = to_drop)   
 
     if recherche is False :
         return df
@@ -68,12 +68,13 @@ def request_food_local(recherche = False, flask = False, type_pred = "fruits"):
         return df['alim_nom_fr']
     else :
         if flask is True :
-            #Result = clean_df[clean_df['alim_nom_fr'].str.contains(recherche)].transpose()
-            Result = clean_df[clean_df['alim_nom_fr'].str.contains("Pomme")].transpose() #### FOR TEST
+            # Result = df[df['alim_nom_fr'].str.contains(recherche)].transpose() #
+            terms = recherche.split()
+            Result = df[df['alim_nom_fr'].str.contains('|'.join(terms))].transpose()
             columns = Result.columns.values
-
 
             row = [Result.to_html(classes='data')] 
             return columns,row
         else : 
             return ""
+

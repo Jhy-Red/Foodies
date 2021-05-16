@@ -16,6 +16,8 @@ RUN pip install -r requirements.txt
 WORKDIR /foodies
 COPY . .
 
+ENV PYTHONPATH "${PYTHONPATH}:/foodies"
+
 EXPOSE 5000
 
 CMD ["flask", "run"]

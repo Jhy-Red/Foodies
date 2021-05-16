@@ -1,13 +1,15 @@
 #!usr/bin/python3
 
 
-def prediction(image, size = (96,96)):
+def prediction(image, model = 1, size = (96,96), user = False):
 
     """
     img : path to file
     size : 
-    weight : weight approx desired google only 
-    height : height approx desired google only
+    weight : weight of model
+    height : height of model
+    model : 1 = Binary Apple and Banane
+    model : 2 = 130 class
 
     """
     from tensorflow import keras
@@ -15,37 +17,34 @@ def prediction(image, size = (96,96)):
     image_for_keras = keras.preprocessing.image.load_img(image, target_size=size)
     image_for_keras = keras.preprocessing.image.img_to_array(image_for_keras)
     
-    
     import numpy as np
     image_for_keras = np.expand_dims(image_for_keras, axis = 0)
-
-    model = keras.models.load_model('models/model-prototype')
+    
+    if model == 1:
+        model_choose = 'models/model-prototype'
+        class_model = open("models/modele-prototype-2.pkl", "rb")
+    elif model == 2 :
+        model_choose = 'models/modele-prototype-131-2'
+        class_model = open("models/modele-prototype-131.pkl", "rb")
+    
+    model = keras.models.load_model(model_choose)
+    
     prediction = model.predict(image_for_keras)
 
     
     y_classes = prediction.argmax(axis=-1)
 
-    if y_classes == 0 :
-        result = "Pomme"
-    elif y_classes == 1:
-        result = "Banane"
-    else : 
-        result = "erreur"
-        
+    import pickle
 
+    
+    dict_class = pickle.load(class_model)
+
+    class_model.close()
+
+    for keys, values in dict_class.items():
+        if values == y_classes:
+            result = keys
+            
     return result
-
-    """
-    from os import listdir
-    mapping = []
-    for x in listdir("DL/TRAIN") :
-        mapping.append(x)
-
-    try  :
-        return mapping[int(y_classes)]#
-    except :    
-        return "erreur"
-    """
-
 
 #print(prediction("static/image/21-05-14_01-04-11.jpg"))
