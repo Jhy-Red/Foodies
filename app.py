@@ -4,7 +4,7 @@
 #Main
 from flask import Flask, render_template,request,redirect
 #Login
-from flask_login import LoginManager,login_user,logout_user
+from flask_login import LoginManager,login_user,logout_user,current_user
 from ressources.userdata import User
 #PY
 from ressources import prediction as pred
@@ -26,8 +26,9 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     user = User()
-    user_ID = user.ID
-    return user_ID
+    user.ID = user_id
+    return user
+    #return User.get_id(user_id)
 
 #Stockage serveur
 UPLOAD_FOLDER = 'static/image'
@@ -45,8 +46,13 @@ def home():
         taille = int(imc_form["taille"])
         poids = int(imc_form['poids'])
         imc = round((poids)/((taille/100)**2),2)
-        return render_template('home.html',imc = imc) 
 
+        if current_user.is_authenticated:
+            #user_id = 1 
+            user_id = current_user.ID
+            SQL_APP.save_imc(user_id = str(user_id),imc = imc)
+        return render_template('home.html',imc = imc) 
+    
     else :
         return render_template('home.html') 
 
@@ -69,6 +75,7 @@ def loggin():
 @app.route('/deconnection', methods=['GET', 'POST'])
 def logout():
     logout_user()
+
     return  redirect ("/")
 
 

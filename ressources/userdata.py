@@ -12,10 +12,11 @@ class User(UserMixin) :
     Age = None, 
     Poids = None,
     Sexe = None,
-       
+
     
     def get_id(self):
-        return self.ID # a transformer en unicode avant ré utilisation sinon crash
+        #return bytes(self.ID) # a transformer en unicode avant ré utilisation sinon crash
+        return self.ID
 """
     def get_data(self,id):
         if id is not False :

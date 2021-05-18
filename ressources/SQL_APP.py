@@ -77,18 +77,39 @@ def create_table_users():
     mycursor.close() 
 
 #create_table_users()
+
+def create_table_IMC():
+    mycursor = mydb.cursor()
+
+    request_init = "CREATE TABLE IMC "
+
+    ID_USERS = "ID_USERS INT NOT NULL references USERS(USERS_ID) "
+    CREATION = "CREATION DATETIME DEFAULT (CURRENT_TIMESTAMP()) "
+    IMC      = "IMC FLOAT(4) NOT NULL"
+    
+    request_SQL_LOG     = ID_USERS 
+    request_SQL_APP     = CREATION + "," + IMC 
+
+    request = request_init + "(" + request_SQL_LOG + "," + request_SQL_APP  +")"
+    mycursor.execute(request)
+    mycursor.close() 
+
+#create_table_IMC()
+
+
+def alter_table_IMC():
+    mycursor = mydb.cursor()
+
+    request_init = "CREATE TABLE IMC "
+
+    request = "alter table IMC ADD CONSTRAINT fk_ID_USERS FOREIGN KEY(ID_USERS) references  USERS(ID_USERS)"
+
+    mycursor.execute(request)
+    mycursor.close() 
+
+#alter_table_IMC()
     
 def show_elements(Table = 'USERS'):
-    """
-    import mysql.connector
-
-    mydb = mysql.connector.connect(
-       host="localhost"
-    , user="root"
-    , password="Umbrell@2325"
-    , database = "FOOD_ALPHA"
-    )
-    """
 
     mycursor = mydb.cursor()
     request = "SELECT * FROM {TABLE}".format(TABLE = Table)
@@ -149,6 +170,7 @@ def creation_user(MAIL,USERNAME ,PASSWORD, table = 'USERS', hash = True):
     mycursor.execute(request)
     mycursor.close()
     mydb.commit()
+
 
 
 def connection_user(MAIL,PASSWORD, table = 'USERS'):
@@ -214,3 +236,19 @@ def information_user2(ID,table='USERS'):
 #data = information_user(1,userdata)
 #print(data.Adresse_mail)
 #print(userdata.Adresse_mail)
+
+def save_imc(user_id,imc,table = 'IMC'):
+   
+    mycursor = mydb.cursor()
+    request_init = "INSERT INTO {TABLE}".format(TABLE = table)
+    request_table = "(ID_USERS,IMC)"
+
+    request_value =  "('{USER_ID}','{IMC}')".format(USER_ID = user_id, IMC = imc)
+    
+    request = request_init + request_table + "VALUES" + request_value +";"
+    mycursor.execute(request)
+    mycursor.close()
+    mydb.commit()
+#save_imc(1,30)
+
+#print(show_elements(Table="IMC"))
