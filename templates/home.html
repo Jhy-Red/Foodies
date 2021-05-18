@@ -20,25 +20,42 @@
             <li> 
                 <a class = "hyperlink_disable" href = "/prediction-picture" > Prediction d'une photo</a> 
             </li>
+        </ul>            
+            <ul class = "button">
+            <li> 
+                <a class = "hyperlink_disable" href = "/connection" > Connection</a> 
+            </li>
         </ul>
+    </ul>            
+        <ul class = "button">
+            <li> 
+                <a class = "hyperlink_disable" href = "/deconnection" > Deconnection</a> 
+            </li>
+        </ul>   
         <ul class = "button">
             <li> 
                 <a class = "hyperlink_disable" href = "/inscription" > Inscription</a> 
             </li>
         </ul>
 
+
         </br>
         </br>
         </br>
         </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
+        <div> Outils IMC </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            Taille(cm)          : <input type = "number" name = "taille" /> <br>
+            Poids(kg)           : <input type = "number" name= "poids" /> <br>
+            <input type = "submit" value = "Calcul IMC">
+        </form>
+        
+
+      <div> 
+          {{imc}}
+      </div>
+
         </br>
         </br>
         </br>

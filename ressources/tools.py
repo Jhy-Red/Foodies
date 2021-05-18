@@ -56,8 +56,6 @@ def request_food_local(recherche = False, flask = False, type_pred = "fruits"):
 
     df = df[df['alim_ssgrp_nom_fr']== type_pred]
 
-
-
     cols_id = ["alim_grp_code","alim_ssgrp_code","alim_ssssgrp_code"]
     to_drop = cols_id
     df = df.drop(columns = to_drop)   

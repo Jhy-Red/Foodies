@@ -156,7 +156,7 @@ def connection_user(MAIL,PASSWORD, table = 'USERS'):
     Request Token users
     """
     mycursor = mydb.cursor()
-    request = "SELECT ID_USERS,E_MAIL, PASSWORD,USERNAME FROM {TABLE} WHERE E_MAIL = '{EMAIL}' AND PASSWORD ='{PASSWORD}'".format(TABLE = table, EMAIL =MAIL, PASSWORD = PASSWORD)
+    request = "SELECT ID_USERS,E_MAIL, PASSWORD,USERNAME FROM {TABLE} WHERE E_MAIL = '{EMAIL}' AND PASSWORD =MD5('{PASSWORD}')".format(TABLE = table, EMAIL =MAIL, PASSWORD = PASSWORD)
     mycursor.execute(request)
     result = mycursor.fetchall()
     mycursor.close()
@@ -167,9 +167,8 @@ def connection_user(MAIL,PASSWORD, table = 'USERS'):
     mycursor.close()
     return ID,email,password,pseudo
 
-
 """
-A,B,C,D = connection_user(MAIL = "hauet.joffrey@hotmail.fr", PASSWORD = "456")
+A,B,C,D = connection_user(MAIL = "jhyeon@hotmail.fr", PASSWORD = "Elsa")
 print(A)
 print(B)
 print(C)
@@ -197,7 +196,21 @@ def information_user(ID,userdata, table = 'USERS'):
     
     mycursor.close()
     return userdata
-#import user
-#userdata = user.User()
+
+def information_user2(ID,table='USERS'):
+    """
+    Request ID users for flask login
+    """
+    mycursor = mydb.cursor()
+    request = "SELECT * FROM {TABLE} WHERE ID_USERS = '{ID}' ".format(TABLE = table, ID=ID)
+    mycursor.execute(request)
+    result = mycursor.fetchall()
+
+    return result
+
+#from userdata import User
+#userdata = User()
+#userdata.get_data(1)
 #data = information_user(1,userdata)
 #print(data.Adresse_mail)
+#print(userdata.Adresse_mail)

@@ -1,13 +1,33 @@
 #!/usr/bin/python3
 
 #Import
-from flask import Flask, render_template,request
+#Main
+from flask import Flask, render_template,request,redirect
+#Login
+from flask_login import LoginManager,login_user,logout_user
+from ressources.userdata import User
+#PY
 from ressources import prediction as pred
 from ressources import tools as tools
 from  ressources import SQL_APP as SQL_APP
 
 #Definition APP
 app = Flask(__name__,static_url_path='/static')
+
+secret_key_file=open("/media/jhy/46AE-6494/Projet/id.txt","r")
+secret_key=secret_key_file.readlines()
+secret_key_file.close()
+app.secret_key = secret_key[0]
+
+#Definition Log
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    user = User()
+    user_ID = user.ID
+    return user_ID
 
 #Stockage serveur
 UPLOAD_FOLDER = 'static/image'
@@ -16,11 +36,41 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 #stockage des images
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
 #Route definition
 @app.route('/', methods=['GET', 'POST'])
 def home(): 
-    return render_template('home.html') 
+    
+    if request.method == "POST":
+        imc_form = request.form
+        taille = int(imc_form["taille"])
+        poids = int(imc_form['poids'])
+        imc = round((poids)/((taille/100)**2),2)
+        return render_template('home.html',imc = imc) 
+
+    else :
+        return render_template('home.html') 
+
+
+@app.route('/connection', methods=['GET', 'POST'])
+def loggin(): 
+    if request.method == "POST":
+        details = request.form
+        adresse_mail = details['adresse_mail']
+        password = details['mot_de_passe']
+        id_user,adresse_mail_base,password_base,pseudo = SQL_APP.connection_user(adresse_mail,password)
+        user = User()
+        user.ID = id_user
+        login_user(user,force= False)
+        
+        return render_template('welcome.html',pseudo = pseudo)
+    else :
+        return render_template('login.html')
+
+@app.route('/deconnection', methods=['GET', 'POST'])
+def logout():
+    logout_user()
+    return  redirect ("/")
+
 
 @app.route('/prediction-picture', methods=['GET', 'POST'])
 def prediction_photo(): 
@@ -31,10 +81,13 @@ def prediction_photo():
         resultat = tools.translate(resultat, dest = 'fr', short = True)
 
         apports_cols,apports_row = tools.request_food_local(recherche = resultat,flask = True)
+
+        resultat = "Votre photo semble contenir  :" + resultat
         
         return render_template('from_picture.html', pred = resultat, apports_cols = apports_cols, apports_row = apports_row )
     else :
         return render_template('from_picture.html')
+
 
 @app.route('/inscription',methods=['GET', 'POST'])
 def inscription(): 
@@ -50,12 +103,9 @@ def inscription():
         return render_template('inscription.html')
 
 
-
 @app.route('/about')
 def about(): 
     return render_template('about.html')
-
-
 
 #Launch Flask
 if __name__ == "__main__":
