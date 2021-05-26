@@ -2,7 +2,7 @@
 
 #Import
 #Main
-from flask import Flask, render_template,request,redirect
+from flask import Flask, render_template,request,redirect, flash
 #Login
 from flask_login import LoginManager,login_user,logout_user,current_user
 from ressources.userdata import User
@@ -48,13 +48,15 @@ def home():
         imc = round((poids)/((taille/100)**2),2)
 
         if current_user.is_authenticated:
-            #user_id = 1 
             user_id = current_user.ID
             SQL_APP.save_imc(user_id = str(user_id),imc = imc)
-        return render_template('home.html',imc = imc) 
+        return render_template('home logged.html',imc = imc) 
     
     else :
-        return render_template('home.html') 
+        if current_user.is_authenticated:
+            return render_template("home logged.html")
+        else :    
+            return render_template('home.html') 
 
 
 @app.route('/connection', methods=['GET', 'POST'])
@@ -63,12 +65,22 @@ def loggin():
         details = request.form
         adresse_mail = details['adresse_mail']
         password = details['mot_de_passe']
-        id_user,adresse_mail_base,password_base,pseudo = SQL_APP.connection_user(adresse_mail,password)
-        user = User()
-        user.ID = id_user
-        login_user(user,force= False)
-        
-        return render_template('welcome.html',pseudo = pseudo)
+
+        if adresse_mail == "" or password == "" :
+            error =  "Veuillez saisir un utilisateur ou mots de passe"
+            return render_template('login.html',error=error)
+
+        try :
+            id_user,adresse_mail_base,password_base,pseudo = SQL_APP.connection_user(adresse_mail,password)
+            user = User()
+            user.ID = id_user
+            login_user(user,force= False)
+            return render_template('welcome.html',pseudo = pseudo)
+
+        except :
+            error =  "Utilisateur inconnu ou mot de passe incorecte"
+            return render_template('login.html',error=error)
+
     else :
         return render_template('login.html')
 
@@ -85,6 +97,22 @@ def prediction_photo():
         image = request.files['image_users']
         filename = tools.saves_pictures(UPLOAD_FOLDER,image,app)
         resultat = pred.prediction(filename,model =1)
+        resultat = tools.translate(resultat, dest = 'fr', short = True)
+
+        apports_cols,apports_row = tools.request_food_local(recherche = resultat,flask = True)
+
+        resultat = "Votre photo semble contenir  :" + resultat
+        
+        return render_template('from_picture.html', pred = resultat, apports_cols = apports_cols, apports_row = apports_row )
+    else :
+        return render_template('from_picture.html')
+
+@app.route('/prediction-picture2', methods=['GET', 'POST'])
+def prediction_photo2(): 
+    if request.method == "POST":
+        image = request.files['image_users']
+        filename = tools.saves_pictures(UPLOAD_FOLDER,image,app)
+        resultat = pred.prediction(filename,model =2)
         resultat = tools.translate(resultat, dest = 'fr', short = True)
 
         apports_cols,apports_row = tools.request_food_local(recherche = resultat,flask = True)

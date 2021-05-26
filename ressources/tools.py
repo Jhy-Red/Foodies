@@ -67,6 +67,7 @@ def request_food_local(recherche = False, flask = False, type_pred = "fruits"):
     else :
         if flask is True :
             # Result = df[df['alim_nom_fr'].str.contains(recherche)].transpose() #
+            recherche =recherche.title()
             terms = recherche.split()
             Result = df[df['alim_nom_fr'].str.contains('|'.join(terms))].transpose()
             columns = Result.columns.values
