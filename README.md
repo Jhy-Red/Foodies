@@ -1,1 +1,7 @@
-Start of Foodies Version 0.00
+Foodies Version 0.50
+
+-Prediction
+-Inscription
+-Login
+-disconnect
+-data return

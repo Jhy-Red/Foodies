@@ -50,12 +50,15 @@ def home():
         if current_user.is_authenticated:
             user_id = current_user.ID
             SQL_APP.save_imc(user_id = str(user_id),imc = imc)
-        return render_template('home logged.html',imc = imc) 
+            return render_template('home logged.html',imc = imc) 
+        else :
+            return render_template('home.html', imc=imc)
     
     else :
         if current_user.is_authenticated:
             return render_template("home logged.html")
         else :    
+
             return render_template('home.html') 
 
 
